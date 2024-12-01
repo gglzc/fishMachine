@@ -26,7 +26,7 @@ func (s *GameServer) ShootBullet(ctx context.Context, req *pb.ShootRequest) (*pb
 	}
 	return &pb.ShootResponse{
 		Captured: true,
-		Reward:   0,
+		Reward:   req.Cost,
 		Error:    "",
 	}, nil
 }

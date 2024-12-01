@@ -11,7 +11,7 @@ import (
 var FishConfig map[int]*models.Fish
 
 func LoadFishConfig() {
-    data, err := os.ReadFile("config/fish_config.json")
+    data, err := os.ReadFile("./config/fish_config.json")
     if err != nil {
         log.Fatalf("Failed to read fish config file: %v", err)
     }

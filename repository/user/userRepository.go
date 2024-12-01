@@ -4,10 +4,12 @@ import (
 	"database/sql"
 
 	models "github.com/gglzc/fishMachine/models/user"
+	"github.com/redis/go-redis/v9"
 )
 
 type UserRepository struct {
     DB *sql.DB
+    Redis *redis.Client
 }
 
 func (ur *UserRepository) GetUserByID(id int64) (*models.User, error) {

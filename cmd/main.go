@@ -9,6 +9,7 @@ import (
 
 	"github.com/gglzc/fishMachine/grpc/server"
 	"github.com/gglzc/fishMachine/pkg/mysql"
+	pkg "github.com/gglzc/fishMachine/pkg/redis"
 	pb "github.com/gglzc/fishMachine/proto"
 	repositories "github.com/gglzc/fishMachine/repository/user"
 	bulletServices "github.com/gglzc/fishMachine/service/bullet"
@@ -21,11 +22,20 @@ func main() {
 	// 配置伺服器地址和端口
 	address := ":50051"
 	listener, err := net.Listen("tcp", address)
-
+	if err != nil {
+		log.Fatalf("Address Fail %v", err)
+	}
+	
 	db, err := mysql.InitDB()
 	if err != nil {
 		log.Fatalf("Database initialization failed: %v", err)
 	}
+	
+	redisClient, err := pkg.InitRedis() 
+	if err != nil {
+		log.Fatalf("Redis initialization failed: %v", err)
+	}
+
 	defer db.Close()
 
 	if err != nil {
@@ -37,7 +47,10 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	// 初始化業務邏輯服務
-	userRepository := &repositories.UserRepository{DB: db}
+	userRepository := &repositories.UserRepository{
+		DB:    db,
+		Redis: redisClient,
+	}
 	userService := &userServices.UserService{UserRepo: userRepository}
 	bulletService := &bulletServices.GameService{
 		UserService: userService,
