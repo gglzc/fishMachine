@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug main.go",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/main.go",
+            "args": [],
+            "buildFlags": "",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env", // 可选：加载环境变量文件
+            "cwd": "${workspaceFolder}" // 工作目录
+        }
+    ]
+}
