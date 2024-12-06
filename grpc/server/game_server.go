@@ -7,6 +7,7 @@ import (
 	pb "github.com/gglzc/fishMachine/proto"
 	bulletServices "github.com/gglzc/fishMachine/service/bullet"
 	userServices "github.com/gglzc/fishMachine/service/user"
+	"github.com/google/uuid"
 )
 
 type GameServer struct {
@@ -46,7 +47,7 @@ func (s *GameServer) GetUser(ctx context.Context, req *pb.UserRequest) (*pb.User
 }
 func (s *GameServer)CreateUser(ctx context.Context , req *pb.CreateUserRequest)(*pb.CreateUserResponse,error){
 	err := s.UserService.CreateUser(models.User{
-		ID:       1,
+		ID:       int64(uuid.New().ID()),
 		Username: req.Username,
 		Password: req.Password,
 		Balance:  1000000000,
@@ -57,7 +58,7 @@ func (s *GameServer)CreateUser(ctx context.Context , req *pb.CreateUserRequest)(
 			Error: err.Error(),
 		}, nil
 	}
-	// 返回成功响应
+
 	return &pb.CreateUserResponse{
 		Status: "Success Create User",
 		Error: "",

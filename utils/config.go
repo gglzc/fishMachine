@@ -2,16 +2,20 @@ package utils
 
 import (
 	"encoding/json"
-	"os"
 	"log"
+	"os"
 
 	models "github.com/gglzc/fishMachine/models/fish"
+	"github.com/joho/godotenv"
 )
 
 var FishConfig map[int]*models.Fish
 
 func LoadFishConfig() {
-    data, err := os.ReadFile("./config/fish_config.json")
+    if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system environment variables")
+	}
+    data, err := os.ReadFile("./config/fishConfig.json")
     if err != nil {
         log.Fatalf("Failed to read fish config file: %v", err)
     }

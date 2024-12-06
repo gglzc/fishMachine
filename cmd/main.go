@@ -14,6 +14,7 @@ import (
 	repositories "github.com/gglzc/fishMachine/repository/user"
 	bulletServices "github.com/gglzc/fishMachine/service/bullet"
 	userServices "github.com/gglzc/fishMachine/service/user"
+	"github.com/gglzc/fishMachine/utils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -42,10 +43,10 @@ func main() {
 		log.Fatalf("Failed to listen on %s: %v", address, err)
 	}
 	log.Printf("Server listening on %s", address)
-
+	//生成魚
+	utils.LoadFishConfig()
 	// 創建 gRPC 伺服器
 	grpcServer := grpc.NewServer()
-
 	// 初始化業務邏輯服務
 	userRepository := &repositories.UserRepository{
 		DB:    db,
@@ -55,7 +56,7 @@ func main() {
 	bulletService := &bulletServices.GameService{
 		UserService: userService,
 	}
-
+	
 	// 註冊伺服器
 	gameServer := &server.GameServer{
 		BulltetService: bulletService,

@@ -23,16 +23,20 @@ func (us *UserService) GetUserByID(id int64) (*models.User, error) {
     redisKey := strconv.FormatInt(id, 10)
 
     // 嘗試從 Redis 獲取數據
-    if err := us.UserRepo.Redis.Get(ctx, redisKey).Scan(user); err == nil {
+    redisData, err := us.UserRepo.Redis.Get(ctx, redisKey).Result()
+    if err == nil {
+        err := json.Unmarshal([]byte(redisData), user)
+        if err != nil {
+            return nil, fmt.Errorf("failed to unmarshal Redis data: %v", err)
+        }
+        
         return user, nil
     }
-
-    // 如果 Redis 沒有數據，查詢 MySQL
-    user, err := us.UserRepo.GetUserByID(id)
+    // 如果 Redis 沒有數據 查詢 MySQL
+    user, err = us.UserRepo.GetUserByID(id)
     if err != nil {
         return nil, err
     }
-
     // 將查詢結果緩存到 Redis
     userJson, err := json.Marshal(user) // 將 user 結構序列化為 JSON
 	if err != nil {
@@ -56,5 +60,23 @@ func (us *UserService) CreateUser(user models.User) (error) {
 
 func (us *UserService) UpdateBalance(userID int64, amount int64) error {
     return us.UserRepo.UpdateBalance(userID, amount)
+}
+
+func (us *UserService) Login(username string , pwd string)error{
+    // check if user exist 
+    // redis
+    
+    // redis missed find db
+
+    // check user agent and ip
+    // ttl = 60 * 8 * 60 s
+    return nil
+}
+
+func (us *UserService) Logout(username string , pwd string)error{
+    // check is user exist 
+    // check user agent and ip
+    // ttl = 60 * 8 * 60 s
+    return nil
 }
 

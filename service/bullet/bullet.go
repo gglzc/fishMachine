@@ -9,7 +9,6 @@ import (
 
 type GameService struct {
     UserService *services.UserService
-    // RoomService 
     // 使用 mutex 確保餘額操作的線程安全
     BalanceMutex sync.Mutex
 }

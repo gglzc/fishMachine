@@ -24,9 +24,9 @@ func (ur *UserRepository) GetUserByID(id int64) (*models.User, error) {
 
 func (ur *UserRepository) CreateUser(user models.User) error {
     
-    query := "INSERT INTO users (username, balance, created_at, updated_at) VALUES (?, ?, NOW(), NOW())"
+    query := "INSERT INTO users (username, password,balance, created_at, updated_at) VALUES (?, ?, ?,NOW(), NOW())"
 
-    _, err := ur.DB.Exec(query, user.Username, user.Balance)
+    _, err := ur.DB.Exec(query, user.Username,user.Password, user.Balance)
     if err != nil {
         return err 
     }
